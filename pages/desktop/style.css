@@ -1,113 +1,178 @@
-/* Reset e base */
+/* Estilos Gerais */
 body {
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #fff;
+  background-color: #f0f2f5;
 }
 
-/* Container principal */
-.balancas-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-  padding: 30px;
-  flex-wrap: wrap;
-}
-
-/* Estilo de cada balança */
-.balanca {
-  background-color: #ddd;
-  border-radius: 10px;
-  padding: 20px;
-  width: 45%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Botões de controle */
-.controle-balanca {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.btn {
-  padding: 10px 20px;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.iniciar {
-  background-color: #4caf50;
-  color: white;
-}
-
-.parar {
-  background-color: #c62828;
-  color: white;
-}
-
-.complemento {
-  background-color: #ffd700;
-  color: black;
-}
-
-/* Título das balanças */
-.balanca h2 {
-  text-align: center;
-  font-size: 28px;
-  margin: 0 0 15px 0;
-}
-
-/* Peso atual */
-.peso-atual {
-  background-color: white;
-  font-size: 60px;
-  text-align: center;
-  padding: 30px 0;
-  margin-bottom: 20px;
-  border-radius: 5px;
-}
-
-/* Histórico de pesagens */
-.balanca h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-.historico {
-  height: 150px;
-  background-color: #ccc;
-  border-radius: 5px;
-}
-/* Barra superior */
-.top-bar {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #d9d9d9;
-  color: white;
   padding: 10px 20px;
-  height: 60px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  color: white;
 }
 
-.logo img {
+.logo {
   height: 40px;
 }
 
-.sair {
-  background-color: #e53935;
+.logout-button {
+  background-color: #af3131;
   color: white;
-  font-weight: bold;
-  padding: 8px 16px;
   border: none;
-  border-radius: 6px;
+  padding: 10px 20px;
   cursor: pointer;
+  border-radius: 5px;
+}
+
+.logout-button:hover {
+  background-color: #af3131;
+}
+
+.main-content {
+  padding: 20px;
+}
+
+.balanca-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.balanca {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 45%;
+  margin-bottom: 20px;
+}
+
+.balanca-titulo {
+  margin-top: 0;
+}
+
+.botoes {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.btn.iniciar,
+.btn.enviar {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn.iniciar:hover,
+.btn.enviar:hover {
+  background-color: #218838;
+}
+
+.btn.parar {
+  background-color: #af3131;
+  color: white;
+}
+
+.btn.parar:hover {
+  background-color: #af3131;
+}
+
+.btn.complemento {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.btn.complemento:hover {
+  background-color: #138496;
+}
+
+.peso-display {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.peso {
+  font-size: 2em;
+  font-weight: bold;
+  background-color: #e9ecef;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.historico-titulo {
+  margin-bottom: 10px;
+}
+
+.historico {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+  height: 100px;
+  overflow-y: auto;
+}
+
+/* Barra Lateral */
+.barra-lateral {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 320px;
+  height: 100%;
+  background-color: #ffffff;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  transition: right 0.3s ease;
+  z-index: 1000;
+}
+
+.barra-lateral.ativa {
+  right: 0;
+}
+
+.barra-lateral h2 {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.barra-lateral label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.barra-lateral .input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+}
+
+.barra-lateral .btn.enviar {
+  width: 100%;
+}
+
+.barra-lateral .mensagem {
+  display: none;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  border-radius: 5px;
 }
