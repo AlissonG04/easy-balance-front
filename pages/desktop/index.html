@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monitoramento de Balanças</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Barra Superior -->
+    <header class="top-bar">
+      <div class="logo">
+        <img src="/assets/logo.png" alt="Logo do Sistema" />
+      </div>
+      <button class="btn sair">Sair</button>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <div class="balancas-container">
+      <!-- Balança 01 -->
+      <div class="balanca" id="balanca01">
+        <div class="controle-balanca">
+          <button class="btn iniciar">Iniciar</button>
+          <button class="btn parar">Parar</button>
+          <button class="btn complemento">Complemento</button>
+        </div>
+        <h2>Balança 01</h2>
+        <div class="peso-atual" id="peso01">0</div>
+        <h3>Histórico de Pesagens</h3>
+        <div class="historico" id="historico01"></div>
+      </div>
+
+      <!-- Balança 02 -->
+      <div class="balanca" id="balanca02">
+        <div class="controle-balanca">
+          <button class="btn iniciar">Iniciar</button>
+          <button class="btn parar">Parar</button>
+          <button class="btn complemento">Complemento</button>
+        </div>
+        <h2>Balança 02</h2>
+        <div class="peso-atual" id="peso02">0</div>
+        <h3>Histórico de Pesagens</h3>
+        <div class="historico" id="historico02"></div>
+      </div>
+    </div>
+  </body>
+</html>
