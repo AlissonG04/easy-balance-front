@@ -1,13 +1,19 @@
-// desktop/app.js
-document.getElementById("loginForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+  const loginForm = document.getElementById("loginForm");
 
-  const nome = document.getElementById("nome").value;
-  const sobrenome = document.getElementById("sobrenome").value;
+  if (loginForm) {
+    loginForm.addEventListener("submit", function (event) {
+      event.preventDefault();
 
-  if (nome && sobrenome) {
-    // Simula "login" — depois podemos guardar no localStorage ou sessionStorage
-    sessionStorage.setItem("usuario", JSON.stringify({ nome, sobrenome }));
-    window.location.href = "main.html"; // Aqui será a próxima tela
+      const nome = document.getElementById("nome").value.trim();
+      const sobrenome = document.getElementById("sobrenome").value.trim();
+
+      if (nome && sobrenome) {
+        localStorage.setItem("usuario", `${nome} ${sobrenome}`);
+        window.location.href = "pages/desktop/principal.html";
+      } else {
+        alert("Por favor, preencha nome e sobrenome.");
+      }
+    });
   }
 });
