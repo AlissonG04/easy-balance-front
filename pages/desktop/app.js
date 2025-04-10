@@ -1,5 +1,4 @@
 // app.js completo e funcional
-
 document.addEventListener("DOMContentLoaded", function () {
   // Impede acesso direto à tela principal sem login
   if (!localStorage.getItem("usuario")) {
@@ -15,6 +14,21 @@ document.addEventListener("DOMContentLoaded", function () {
   if (nomeUsuario && spanNome) {
     spanNome.textContent = `Olá, ${nomeUsuario}`;
   }
+
+  // WebSocket - Receber dados em tempo real do back-end
+  const socket = new WebSocket("ws://localhost:8080");
+
+  socket.onmessage = function (event) {
+    const { balanca, peso } = JSON.parse(event.data);
+
+    const pesoDisplay = document.querySelector(
+      `.balanca[data-id="${balanca}"] .peso`
+    );
+
+    if (pesoDisplay) {
+      pesoDisplay.textContent = peso;
+    }
+  };
 
   const botoesComplemento = document.querySelectorAll(".btn.complemento");
   const barraLateral = document.getElementById("barra-lateral");
