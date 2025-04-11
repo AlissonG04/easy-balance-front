@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Operador - Complemento</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <!-- Estado inicial -->
+      <div
+        class="mensagem-inicial"
+        id="mensagem-inicial"
+        style="display: block"
+      >
+        <p>
+          Nenhum novo complemento solicitado no momento.<br />Por favor,
+          aguarde...
+        </p>
+      </div>
+
+      <!-- Solicitação recebida -->
+      <div class="solicitacao" id="solicitacao" style="display: none">
+        <h2>Solicitação de complemento</h2>
+        <p><strong>Balança:</strong> <span id="balanca-id"></span></p>
+        <p>
+          <strong>Bruto desejado:</strong> <span id="bruto-desejado"></span> kg
+        </p>
+        <div class="botoes">
+          <button id="aceitar">Aceitar</button>
+          <button id="recusar">Recusar</button>
+        </div>
+      </div>
+
+      <!-- Acompanhamento do complemento -->
+      <div class="acompanhamento" id="acompanhamento" style="display: none">
+        <h2>Complemento em andamento</h2>
+        <p>
+          <strong>Bruto desejado:</strong> <span id="bruto-final"></span> kg
+        </p>
+        <p><strong>Peso atual:</strong> <span id="peso-atual">0</span> kg</p>
+        <button id="finalizar">Finalizar</button>
+      </div>
+    </main>
+
+    <script src="operador.js"></script>
+  </body>
+</html>

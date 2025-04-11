@@ -1,0 +1,86 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  max-width: 500px;
+  width: 100%;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+p {
+  font-size: 1.1em;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.botoes {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+button {
+  padding: 12px 24px;
+  font-size: 1em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button#aceitar {
+  background-color: #28a745;
+  color: white;
+}
+
+button#aceitar:hover {
+  background-color: #218838;
+}
+
+button#recusar {
+  background-color: #dc3545;
+  color: white;
+}
+
+button#recusar:hover {
+  background-color: #c82333;
+}
+
+button#finalizar {
+  background-color: #007bff;
+  color: white;
+  margin-top: 20px;
+}
+
+button#finalizar:hover {
+  background-color: #0056b3;
+}
+
+.mensagem-inicial,
+.solicitacao,
+.acompanhamento {
+  display: none;
+}
+
+.mensagem-inicial p {
+  font-size: 1.2em;
+  color: #666;
+  line-height: 1.6;
+}
