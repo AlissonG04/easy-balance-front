@@ -1,0 +1,75 @@
+<!-- balanca.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Easy Balance - Balanças</title>
+    <link rel="stylesheet" href="assets/css/balanca.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="logo">
+        <img src="assets/images/logo.png" alt="Easy Balance Logo" />
+        <span>Easy Balance</span>
+      </div>
+      <nav class="menu">
+        <a href="dashboard.html" class="btn voltar">Voltar</a>
+        <button id="logout" class="btn sair">Sair</button>
+      </nav>
+    </header>
+
+    <main class="balancas">
+      <div class="balanca" id="balanca01">
+        <h2>BALANÇA 01</h2>
+        <div class="botoes">
+          <button class="btn verde" onclick="iniciarLeitura(1)">Iniciar</button>
+          <button class="btn vermelho" onclick="pararLeitura(1)">Parar</button>
+          <button class="btn azul" onclick="abrirModal(1)">Compl.</button>
+        </div>
+        <div class="peso" id="peso01">0</div>
+      </div>
+
+      <div class="balanca" id="balanca02">
+        <h2>BALANÇA 02</h2>
+        <div class="botoes">
+          <button class="btn verde" onclick="iniciarLeitura(2)">Iniciar</button>
+          <button class="btn vermelho" onclick="pararLeitura(2)">Parar</button>
+          <button class="btn azul" onclick="abrirModal(2)">Compl.</button>
+        </div>
+        <div class="peso" id="peso02">0</div>
+      </div>
+    </main>
+
+    <!-- Modal de Complemento -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal">
+        <h2>Solicitar Complemento</h2>
+        <form id="complementoForm">
+          <input type="hidden" id="balanceId" />
+
+          <label for="placa">Placa:</label>
+          <input type="text" id="placa" required />
+
+          <label for="tara">Tara (kg):</label>
+          <input type="number" id="tara" step="any" required />
+
+          <label for="liquido">Líquido (kg):</label>
+          <input type="number" id="liquido" step="any" required />
+
+          <label for="bruto">Bruto (kg):</label>
+          <input type="number" id="bruto" disabled />
+
+          <div class="modal-buttons">
+            <button type="submit" class="btn azul">Enviar</button>
+            <button type="button" class="btn vermelho" onclick="fecharModal()">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="assets/js/balanca.js"></script>
+  </body>
+</html>
