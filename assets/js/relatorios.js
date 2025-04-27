@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     tabelaCorpo.innerHTML = "";
 
     if (lista.length === 0) {
-      tabelaCorpo.innerHTML = `<tr><td colspan="8" style="text-align:center;">Nenhum registro encontrado.</td></tr>`;
+      tabelaCorpo.innerHTML = `<tr><td colspan="9" style="text-align:center;">Nenhum registro encontrado.</td></tr>`;
       return;
     }
 
@@ -43,11 +43,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${formatarData(c.created_at)}</td>
+        <td>${c.accepted_at ? formatarData(c.accepted_at) : "-"}</td>
         <td>Balança 0${c.balance_id}</td>
         <td>${c.plate}</td>
         <td>${Number(c.tara).toFixed(2)}</td>
         <td>${Number(c.liquid).toFixed(2)}</td>
-        <td>${(Number(c.tara) + Number(c.liquid)).toFixed(2)}</td>
+        <td>${c.bruto_desejado ? Number(c.bruto_desejado).toFixed(2) : "-"}</td>
         <td>${c.solicitante_username || "N/D"}</td>
         <td>${formatarStatus(c.status)}</td>
       `;
@@ -73,18 +74,23 @@ document.addEventListener("DOMContentLoaded", () => {
   window.filtrarComplementos = () => {
     const inicial = new Date(dataInicialInput.value);
     const final = new Date(dataFinalInput.value);
+    const statusSelecionado = document.getElementById("statusFiltro").value;
 
     if (!dataInicialInput.value || !dataFinalInput.value) {
       alert("Preencha as duas datas para filtrar.");
       return;
     }
 
-    // Ajusta final para o final do dia
     final.setHours(23, 59, 59, 999);
 
     const filtrados = complementos.filter((c) => {
       const dataComplemento = new Date(c.created_at);
-      return dataComplemento >= inicial && dataComplemento <= final;
+      const dentroDoPeriodo =
+        dataComplemento >= inicial && dataComplemento <= final;
+      const statusCorreto =
+        statusSelecionado === "todos" || c.status === statusSelecionado;
+
+      return dentroDoPeriodo && statusCorreto;
     });
 
     renderizarTabela(filtrados);

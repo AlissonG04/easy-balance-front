@@ -34,6 +34,13 @@
           <button class="btn azul" onclick="filtrarComplementos()">
             Filtrar
           </button>
+          <label>Status:</label>
+          <select id="statusFiltro">
+            <option value="todos">Todos</option>
+            <option value="pendente">Pendente</option>
+            <option value="aceito">Aceito</option>
+            <option value="rejeitado">Rejeitado</option>
+          </select>
         </div>
 
         <!-- Botões de Exportação -->
@@ -51,16 +58,18 @@
           <table id="tabelaComplementos">
             <thead>
               <tr>
-                <th>Data</th>
+                <th>Data Solicitação</th>
+                <th>Data Aceitação</th>
                 <th>Balança</th>
                 <th>Placa</th>
                 <th>Tara</th>
                 <th>Líquido</th>
-                <th>Bruto</th>
+                <th>Bruto Desejado</th>
                 <th>Solicitado por</th>
                 <th>Status</th>
               </tr>
             </thead>
+
             <tbody id="tabelaCorpo">
               <!-- Linhas geradas dinamicamente via JS -->
             </tbody>
