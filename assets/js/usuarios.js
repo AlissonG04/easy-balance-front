@@ -91,14 +91,30 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Confirmar exclusão
+  let userIdParaExcluir = null; // Variável temporária para guardar ID
+
+  // Nova função para abrir o modal de confirmação
   window.confirmarExclusao = function (id) {
-    const confirmar = confirm("Deseja realmente excluir este usuário?");
-    if (confirmar) {
-      usuarios = usuarios.filter((u) => u.id !== id);
+    userIdParaExcluir = id;
+    document.getElementById("confirmModalOverlay").style.display = "flex";
+  };
+
+  // Função para confirmar exclusão
+  document.getElementById("confirmYes").addEventListener("click", () => {
+    if (userIdParaExcluir !== null) {
+      usuarios = usuarios.filter((u) => u.id !== userIdParaExcluir);
       listarUsuarios();
       alert("Usuário excluído com sucesso!");
+      userIdParaExcluir = null;
+      document.getElementById("confirmModalOverlay").style.display = "none";
     }
-  };
+  });
+
+  // Função para cancelar exclusão
+  document.getElementById("confirmNo").addEventListener("click", () => {
+    userIdParaExcluir = null;
+    document.getElementById("confirmModalOverlay").style.display = "none";
+  });
 
   // Salvar usuário (Novo ou Editar)
   usuarioForm.addEventListener("submit", (e) => {

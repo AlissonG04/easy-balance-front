@@ -217,3 +217,13 @@ tbody tr:last-child td {
   cursor: pointer;
   font-size: 18px;
 }
+/* Modal de Confirmação */
+.confirm-modal {
+  width: 300px;
+  text-align: center;
+}
+
+.confirm-modal p {
+  margin: 15px 0;
+  font-size: 16px;
+}
