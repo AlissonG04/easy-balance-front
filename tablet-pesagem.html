@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pesagem - Easy Balance</title>
+    <link rel="stylesheet" href="assets/css/tablet-pesagem.css" />
+  </head>
+  <body>
+    <!-- Cabeçalho -->
+    <header class="header">
+      <img src="assets/images/logo.png" alt="Logo Easy Balance" class="logo" />
+      <div class="header-info">
+        <span id="pa-carregadeira"></span>
+      </div>
+      <button class="back-btn" onclick="voltar()">Voltar</button>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-content">
+      <div class="peso-container">
+        <h2>Peso Desejado</h2>
+        <div class="peso-desejado" id="peso-desejado">-- kg</div>
+
+        <h2>Peso Atual</h2>
+        <div class="peso-atual" id="peso-atual">-- kg</div>
+      </div>
+    </main>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="assets/js/tablet-pesagem.js"></script>
+  </body>
+</html>

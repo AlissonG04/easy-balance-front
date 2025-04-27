@@ -1,0 +1,90 @@
+/* assets/css/tablet-pesagem.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #d3d3d3;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cabeçalho */
+.header {
+  background-color: #ffffff;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  width: 50px;
+}
+
+.header-info {
+  flex: 1;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #003366;
+}
+
+.back-btn {
+  background-color: #0066cc;
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.back-btn:hover {
+  background-color: #004c99;
+}
+
+/* Conteúdo principal */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.peso-container {
+  text-align: center;
+  background-color: #ffffff;
+  padding: 30px 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+h2 {
+  color: #003366;
+  margin-bottom: 10px;
+}
+
+.peso-desejado,
+.peso-atual {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #333333;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .peso-desejado,
+  .peso-atual {
+    font-size: 36px;
+  }
+}
