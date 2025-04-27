@@ -1,0 +1,82 @@
+<!-- usuarios.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Easy Balance - Gerenciar Usuários</title>
+    <link rel="stylesheet" href="assets/css/usuarios.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="logo">
+        <img src="assets/images/logo.png" alt="Easy Balance Logo" />
+        <span>Easy Balance</span>
+      </div>
+      <nav class="menu">
+        <a href="dashboard.html" class="btn voltar">Voltar</a>
+        <button id="logout" class="btn sair">Sair</button>
+      </nav>
+    </header>
+
+    <main class="usuarios-container">
+      <div class="usuarios-box">
+        <table>
+          <thead>
+            <tr>
+              <th>Usuário</th>
+              <th>Tipo</th>
+              <th>Data</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="usuariosTableBody">
+            <!-- Lista de usuários será gerada aqui pelo JS -->
+          </tbody>
+        </table>
+
+        <div class="novo-usuario-btn">
+          <button class="btn verde" onclick="abrirModalNovo()">
+            Novo Usuário
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modal Novo/Editar Usuário -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal">
+        <h2 id="modalTitle">Novo Usuário</h2>
+        <form id="usuarioForm">
+          <input type="hidden" id="userId" />
+
+          <label for="username">Usuário:</label>
+          <input type="text" id="username" required />
+
+          <label for="password">Senha:</label>
+          <div class="senha-wrapper">
+            <input type="password" id="password" required />
+            <span class="toggle-password" onclick="toggleSenha()">👁️</span>
+          </div>
+
+          <label for="role">Tipo:</label>
+          <select id="role" required>
+            <option value="">Selecione</option>
+            <option value="admin">Administrador</option>
+            <option value="operador">Operador</option>
+            <option value="desktop">Desktop</option>
+          </select>
+
+          <div class="modal-buttons">
+            <button type="submit" class="btn azul">Salvar</button>
+            <button type="button" class="btn vermelho" onclick="fecharModal()">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="assets/js/usuarios.js"></script>
+  </body>
+</html>
