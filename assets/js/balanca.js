@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tara = parseFloat(taraInput.value) || 0;
     const liquido = parseFloat(liquidoInput.value) || 0;
     const bruto = tara + liquido;
-    brutoInput.value = bruto;
+    brutoInput.value = bruto.toFixed(2); // Sempre duas casas decimais
   }
 
   taraInput.addEventListener("input", atualizarBruto);
