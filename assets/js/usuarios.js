@@ -9,25 +9,46 @@ document.addEventListener("DOMContentLoaded", () => {
   const usernameInput = document.getElementById("username");
   const passwordInput = document.getElementById("password");
   const roleInput = document.getElementById("role");
+  const confirmModalOverlay = document.getElementById("confirmModalOverlay");
+  const confirmYes = document.getElementById("confirmYes");
+  const confirmNo = document.getElementById("confirmNo");
 
-  // Lista simulada de usuários
-  let usuarios = [
-    { id: 1, username: "Jhon Doe", role: "operador", createdAt: "2025-04-23" },
-    { id: 2, username: "Jane Doe", role: "admin", createdAt: "2025-04-23" },
-    { id: 3, username: "Alisson", role: "desktop", createdAt: "2025-04-23" },
-  ];
+  let usuarios = [];
+  let userIdParaExcluir = null;
+  const API_URL = "http://localhost:3000/api/users";
+  const token = localStorage.getItem("token");
 
-  // Função para listar usuários na tabela
-  function listarUsuarios() {
+  if (!token) {
+    alert("Sessão expirada. Faça login novamente.");
+    window.location.href = "index.html";
+  }
+
+  // Função para buscar usuários da API
+  async function listarUsuarios() {
+    try {
+      const response = await fetch(API_URL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      usuarios = await response.json();
+      renderizarUsuarios();
+    } catch (error) {
+      console.error("Erro ao listar usuários:", error);
+      alert("Erro ao carregar usuários.");
+    }
+  }
+
+  // Renderiza os usuários na tabela
+  function renderizarUsuarios() {
     usuariosTableBody.innerHTML = "";
 
     usuarios.forEach((user) => {
       const tr = document.createElement("tr");
-
       tr.innerHTML = `
           <td>${user.username}</td>
           <td>${formatarTipo(user.role)}</td>
-          <td>${formatarData(user.createdAt)}</td>
+          <td>${formatarData(user.created_at)}</td>
           <td>
             <button class="btn azul" onclick="abrirModalEditar(${
               user.id
@@ -37,12 +58,11 @@ document.addEventListener("DOMContentLoaded", () => {
             })">Excluir</button>
           </td>
         `;
-
       usuariosTableBody.appendChild(tr);
     });
   }
 
-  // Helper para formatar o tipo de usuário
+  // Helper: formatar tipo
   function formatarTipo(role) {
     if (role === "admin") return "Administrador";
     if (role === "operador") return "Operador";
@@ -50,13 +70,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return role;
   }
 
-  // Helper para formatar a data
+  // Helper: formatar data
   function formatarData(data) {
     const d = new Date(data);
     return d.toLocaleDateString("pt-BR");
   }
 
-  // Abre modal para criar novo usuário
+  // Abrir modal para novo usuário
   window.abrirModalNovo = function () {
     modalTitle.textContent = "Novo Usuário";
     usuarioForm.reset();
@@ -64,21 +84,26 @@ document.addEventListener("DOMContentLoaded", () => {
     modalOverlay.style.display = "flex";
   };
 
-  // Abre modal para editar usuário
-  window.abrirModalEditar = function (id) {
-    const user = usuarios.find((u) => u.id === id);
-    if (!user) return;
+  // Abrir modal para editar usuário
+  window.abrirModalEditar = async function (id) {
+    try {
+      const user = usuarios.find((u) => u.id === id);
+      if (!user) return;
 
-    modalTitle.textContent = "Editar Usuário";
-    userIdInput.value = user.id;
-    usernameInput.value = user.username;
-    passwordInput.value = ""; // Não carregamos senha antiga
-    roleInput.value = user.role;
+      modalTitle.textContent = "Editar Usuário";
+      userIdInput.value = user.id;
+      usernameInput.value = user.username;
+      passwordInput.value = ""; // senha nunca vem do back-end
+      roleInput.value = user.role;
 
-    modalOverlay.style.display = "flex";
+      modalOverlay.style.display = "flex";
+    } catch (error) {
+      console.error("Erro ao carregar usuário:", error);
+      alert("Erro ao abrir usuário para edição.");
+    }
   };
 
-  // Fecha o modal
+  // Fechar modal de Novo/Editar
   window.fecharModal = function () {
     modalOverlay.style.display = "none";
   };
@@ -90,34 +115,42 @@ document.addEventListener("DOMContentLoaded", () => {
     passwordInput.setAttribute("type", tipo);
   };
 
-  // Confirmar exclusão
-  let userIdParaExcluir = null; // Variável temporária para guardar ID
-
-  // Nova função para abrir o modal de confirmação
+  // Abrir modal de confirmação
   window.confirmarExclusao = function (id) {
     userIdParaExcluir = id;
-    document.getElementById("confirmModalOverlay").style.display = "flex";
+    confirmModalOverlay.style.display = "flex";
   };
 
-  // Função para confirmar exclusão
-  document.getElementById("confirmYes").addEventListener("click", () => {
+  // Confirmar exclusão
+  confirmYes.addEventListener("click", async () => {
     if (userIdParaExcluir !== null) {
-      usuarios = usuarios.filter((u) => u.id !== userIdParaExcluir);
-      listarUsuarios();
-      alert("Usuário excluído com sucesso!");
-      userIdParaExcluir = null;
-      document.getElementById("confirmModalOverlay").style.display = "none";
+      try {
+        await fetch(`${API_URL}/${userIdParaExcluir}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        alert("Usuário excluído com sucesso!");
+        await listarUsuarios();
+      } catch (error) {
+        console.error("Erro ao excluir usuário:", error);
+        alert("Erro ao excluir usuário.");
+      } finally {
+        confirmModalOverlay.style.display = "none";
+        userIdParaExcluir = null;
+      }
     }
   });
 
-  // Função para cancelar exclusão
-  document.getElementById("confirmNo").addEventListener("click", () => {
+  // Cancelar exclusão
+  confirmNo.addEventListener("click", () => {
     userIdParaExcluir = null;
-    document.getElementById("confirmModalOverlay").style.display = "none";
+    confirmModalOverlay.style.display = "none";
   });
 
   // Salvar usuário (Novo ou Editar)
-  usuarioForm.addEventListener("submit", (e) => {
+  usuarioForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const id = userIdInput.value;
@@ -125,42 +158,51 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = passwordInput.value.trim();
     const role = roleInput.value;
 
-    if (!username || !password || !role) {
+    if (!username || !role || (!id && !password)) {
       alert("Preencha todos os campos!");
       return;
     }
 
-    if (id) {
-      // Editar usuário existente
-      const user = usuarios.find((u) => u.id == id);
-      if (user) {
-        user.username = username;
-        user.role = role;
+    try {
+      if (id) {
+        // Atualizar usuário
+        await fetch(`${API_URL}/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ username, password, role }),
+        });
+        alert("Usuário atualizado com sucesso!");
+      } else {
+        // Criar novo usuário
+        await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ username, password, role }),
+        });
+        alert("Usuário criado com sucesso!");
       }
-      alert("Usuário atualizado com sucesso!");
-    } else {
-      // Criar novo usuário
-      const newUser = {
-        id: usuarios.length ? usuarios[usuarios.length - 1].id + 1 : 1,
-        username,
-        role,
-        createdAt: new Date().toISOString(),
-      };
-      usuarios.push(newUser);
-      alert("Usuário criado com sucesso!");
-    }
 
-    listarUsuarios();
-    fecharModal();
+      listarUsuarios();
+      fecharModal();
+    } catch (error) {
+      console.error("Erro ao salvar usuário:", error);
+      alert("Erro ao salvar usuário.");
+    }
   });
 
-  // Botão Logout
+  // Logout
   const logoutButton = document.getElementById("logout");
   logoutButton.addEventListener("click", () => {
     localStorage.removeItem("token");
     window.location.href = "index.html";
   });
 
-  // Inicializar listagem
+  // Inicializar
   listarUsuarios();
 });
