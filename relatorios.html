@@ -1,0 +1,74 @@
+<!-- relatorios.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Easy Balance - Relatórios</title>
+    <link rel="stylesheet" href="assets/css/relatorios.css" />
+    <!-- Biblioteca SheetJS para exportar Excel -->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <!-- Biblioteca html2pdf.js para exportar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="logo">
+        <img src="assets/images/logo.png" alt="Easy Balance Logo" />
+        <span>Easy Balance</span>
+      </div>
+      <nav class="menu">
+        <a href="dashboard.html" class="btn voltar">Voltar</a>
+        <button id="logout" class="btn sair">Sair</button>
+      </nav>
+    </header>
+
+    <main class="relatorios-container">
+      <div class="relatorios-box">
+        <!-- Filtro de Data -->
+        <div class="filtro-datas">
+          <label>Data Inicial:</label>
+          <input type="date" id="dataInicial" />
+          <label>Data Final:</label>
+          <input type="date" id="dataFinal" />
+          <button class="btn azul" onclick="filtrarComplementos()">
+            Filtrar
+          </button>
+        </div>
+
+        <!-- Botões de Exportação -->
+        <div class="botoes-exportar">
+          <button class="btn verde" onclick="exportarExcel()">
+            Exportar para Excel
+          </button>
+          <button class="btn azul" onclick="exportarPDF()">
+            Exportar para PDF
+          </button>
+        </div>
+
+        <!-- Tabela -->
+        <div class="tabela-container" id="relatorioTabela">
+          <table id="tabelaComplementos">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Balança</th>
+                <th>Placa</th>
+                <th>Tara</th>
+                <th>Líquido</th>
+                <th>Bruto</th>
+                <th>Solicitado por</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaCorpo">
+              <!-- Linhas geradas dinamicamente via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <script src="assets/js/relatorios.js"></script>
+  </body>
+</html>
