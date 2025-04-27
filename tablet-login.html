@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Operador - Easy Balance</title>
+    <link rel="stylesheet" href="assets/css/tablet-login.css" />
+  </head>
+
+  <body>
+    <div class="login-container">
+      <div class="login-box">
+        <img
+          src="assets/images/logo.png"
+          alt="Easy Balance Logo"
+          class="logo"
+        />
+        <h1><strong>EASY</strong> <span class="highlight">BALANCE</span></h1>
+
+        <div class="input-group">
+          <input type="text" id="usuario" placeholder="Usuário" />
+        </div>
+        <div class="input-group">
+          <input type="password" id="senha" placeholder="Senha" />
+        </div>
+        <div class="input-group">
+          <input
+            type="number"
+            id="paCarregadeira"
+            placeholder="Pá Carregadeira"
+            min="0"
+          />
+        </div>
+
+        <button onclick="login()">Entrar</button>
+      </div>
+    </div>
+
+    <script src="assets/js/tablet-login.js"></script>
+  </body>
+</html>
