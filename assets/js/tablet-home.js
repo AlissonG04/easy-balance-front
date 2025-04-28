@@ -24,8 +24,10 @@ function renderizarComplementos() {
   semSolicitacoes.style.display = "none";
 
   complementos
-    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Mais recentes primeiro
     .forEach((comp) => {
+      const idComp = comp.id || comp._id;
+
       const card = document.createElement("div");
       card.className = "complemento-card";
 
@@ -50,12 +52,8 @@ function renderizarComplementos() {
         ).toLocaleTimeString("pt-BR")}</div>
 
         <div class="complemento-actions">
-          <button class="btn-aceitar" onclick="aceitarComplemento('${
-            comp.id
-          }')">Aceitar</button>
-          <button class="btn-rejeitar" onclick="rejeitarComplemento('${
-            comp.id
-          }')">Rejeitar</button>
+          <button class="btn-aceitar" onclick="aceitarComplemento('${idComp}')">Aceitar</button>
+          <button class="btn-rejeitar" onclick="rejeitarComplemento('${idComp}')">Rejeitar</button>
         </div>
       `;
 
@@ -63,36 +61,36 @@ function renderizarComplementos() {
     });
 }
 
-// WebSocket recebendo novos complementos
+// Receber novos complementos via WebSocket
 socket.on("new-complement", (data) => {
   complementos.push(data);
   renderizarComplementos();
 });
 
-// Função de aceitar complemento
+// Função para aceitar complemento
 function aceitarComplemento(id) {
-  const complemento = complementos.find((c) => c.id === id);
+  const complemento = complementos.find((c) => (c.id || c._id) === id);
 
   if (!complemento) {
     showToast("Complemento não encontrado.");
     return;
   }
 
-  // Salvar complemento no localStorage
+  // Salva no localStorage
   localStorage.setItem("complementoAceito", JSON.stringify(complemento));
 
-  // Atualizar status local
-  complementos = complementos.filter((c) => c.id !== id);
+  // Remove da lista e atualiza tela
+  complementos = complementos.filter((c) => (c.id || c._id) !== id);
   renderizarComplementos();
 
-  // Redirecionar para tela de pesagem
+  // Redireciona para a tela de pesagem
   window.location.href = "tablet-pesagem.html";
 }
 
-// Função de rejeitar complemento
+// Função para rejeitar complemento
 function rejeitarComplemento(id) {
   if (confirm("Tem certeza que deseja rejeitar esta solicitação?")) {
-    complementos = complementos.filter((c) => c.id !== id);
+    complementos = complementos.filter((c) => (c.id || c._id) !== id);
     renderizarComplementos();
     showToast("Solicitação rejeitada.");
   }
@@ -101,6 +99,7 @@ function rejeitarComplemento(id) {
 // Função para mostrar Toast
 function showToast(mensagem) {
   const toast = document.getElementById("toast");
+  if (!toast) return; // Protege caso toast não exista
   toast.textContent = mensagem;
   toast.className = "toast show";
   setTimeout(() => {

@@ -1,5 +1,3 @@
-// assets/js/balanca.js
-
 document.addEventListener("DOMContentLoaded", () => {
   const modalOverlay = document.getElementById("modalOverlay");
   const complementoForm = document.getElementById("complementoForm");
@@ -34,23 +32,52 @@ document.addEventListener("DOMContentLoaded", () => {
     modalOverlay.style.display = "none";
   };
 
-  // Enviar complemento (preparado para futura integração)
-  complementoForm.addEventListener("submit", (e) => {
+  // Enviar complemento para o back-end
+  complementoForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const complementoData = {
-      balanceId: parseInt(balanceIdInput.value),
-      plate: placaInput.value.trim(),
-      tara: parseFloat(taraInput.value),
-      liquid: parseFloat(liquidoInput.value),
-      gross: parseFloat(brutoInput.value),
-    };
+    const plate = placaInput.value.trim();
+    const tara = parseFloat(taraInput.value);
+    const liquido = parseFloat(liquidoInput.value);
+    const balanceId = parseInt(balanceIdInput.value);
 
-    console.log("Dados para envio:", complementoData);
+    if (!plate || isNaN(tara) || isNaN(liquido)) {
+      alert("Por favor, preencha todos os campos corretamente.");
+      return;
+    }
 
-    // Aqui depois vamos fazer o POST para o back-end usando fetch
-    fecharModal();
-    alert("Solicitação de complemento enviada!");
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch("http://localhost:3000/api/complements", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          balanceId,
+          plate,
+          tara,
+          liquid: liquido,
+        }),
+      });
+
+      if (response.ok) {
+        alert("Solicitação enviada com sucesso!");
+        fecharModal();
+      } else {
+        const errorData = await response.json();
+        alert(
+          `Erro ao enviar solicitação: ${
+            errorData.message || "Erro desconhecido."
+          }`
+        );
+      }
+    } catch (error) {
+      console.error("Erro ao solicitar complemento:", error);
+      alert("Erro ao enviar solicitação.");
+    }
   });
 
   // Botão de Logout
