@@ -1,31 +1,18 @@
-// Conectar ao WebSocket
-const socket = io("http://localhost:3000");
+// assets/js/tablet-home.js
 
-// Elementos da página
+const socket = io("http://localhost:3000"); // Ajuste se necessário
 const container = document.getElementById("complementos-container");
 const semSolicitacoes = document.getElementById("sem-solicitacoes");
+const paCarregadeira = document.getElementById("pa-carregadeira");
 
-// Recuperar informações do operador
-const paCarregadeira = localStorage.getItem("paCarregadeira");
-document.getElementById(
-  "pa-carregadeira"
-).innerText = `Pá Carregadeira ${paCarregadeira}`;
+// Recupera nome da Pá Carregadeira do localStorage
+const pa = localStorage.getItem("paCarregadeira") || "Desconhecida";
+paCarregadeira.textContent = `Pá Carregadeira ${pa}`;
 
-// Token para chamadas autenticadas (se precisar)
-const token = localStorage.getItem("token");
-
-// Lista local para controlar complementos
+// Lista de complementos pendentes
 let complementos = [];
 
-// Função de Logout
-function logout() {
-  localStorage.removeItem("token");
-  localStorage.removeItem("paCarregadeira");
-  localStorage.removeItem("usuario");
-  window.location.href = "tablet-login.html";
-}
-
-// Função para renderizar os complementos na tela
+// Renderizar complementos
 function renderizarComplementos() {
   container.innerHTML = "";
 
@@ -55,15 +42,12 @@ function renderizarComplementos() {
         <div class="complemento-info"><strong>Líquido:</strong> ${Number(
           comp.liquid
         ).toFixed(2)} kg</div>
-        <div class="complemento-info"><strong>Bruto:</strong> ${(
-          Number(comp.tara) + Number(comp.liquid)
-        ).toFixed(2)} kg</div>
         <div class="complemento-info"><strong>Solicitado por:</strong> ${
           comp.solicitante_username || "N/D"
         }</div>
-        <div class="complemento-info"><strong>Hora:</strong> ${formatarData(
+        <div class="complemento-info"><strong>Hora:</strong> ${new Date(
           comp.created_at
-        )}</div>
+        ).toLocaleTimeString("pt-BR")}</div>
 
         <div class="complemento-actions">
           <button class="btn-aceitar" onclick="aceitarComplemento('${
@@ -79,63 +63,43 @@ function renderizarComplementos() {
     });
 }
 
-// Formatar data para exibição
-function formatarData(dataISO) {
-  const data = new Date(dataISO);
-  return data.toLocaleTimeString("pt-BR", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-// Aceitar Complemento
-function aceitarComplemento(id) {
-  const complementoAceito = complementos.find((c) => c.id === id);
-  if (complementoAceito) {
-    // Armazenar informações para usar na tela de pesagem
-    localStorage.setItem(
-      "complementoSelecionado",
-      JSON.stringify(complementoAceito)
-    );
-
-    // Remover da lista local
-    complementos = complementos.filter((c) => c.id !== id);
-    renderizarComplementos();
-
-    // Redirecionar para tela de pesagem
-    window.location.href = "tablet-pesagem.html";
-  }
-}
-
-// Rejeitar Complemento
-function rejeitarComplemento(id) {
-  if (confirm("Tem certeza que deseja rejeitar esta solicitação?")) {
-    // Informar ao servidor que rejeitou
-    fetch(`http://localhost:3000/api/complements/${id}/reject`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          // Remover da lista local
-          complementos = complementos.filter((c) => c.id !== id);
-          renderizarComplementos();
-        } else {
-          alert("Erro ao rejeitar complemento.");
-        }
-      })
-      .catch((error) => {
-        console.error("Erro ao rejeitar complemento:", error);
-        alert("Erro de conexão ao rejeitar complemento.");
-      });
-  }
-}
-
-// Escutar novos complementos em tempo real
-socket.on("new-complement", (complemento) => {
-  complementos.unshift(complemento); // Adiciona no topo
+// Simulação de recebimento via WebSocket
+socket.on("new-complement", (data) => {
+  complementos.push(data);
   renderizarComplementos();
 });
+
+// Funções de aceitar e rejeitar
+function aceitarComplemento(id) {
+  const complemento = complementos.find((c) => c.id === id);
+
+  if (!complemento) {
+    showToast("Complemento não encontrado.");
+    return;
+  }
+
+  // Salva o complemento aceito no localStorage
+  localStorage.setItem("complementoAceito", JSON.stringify(complemento));
+
+  // Remove da lista de pendentes
+  complementos = complementos.filter((c) => c.id !== id);
+  renderizarComplementos();
+
+  // Redireciona para a tela de pesagem
+  window.location.href = "tablet-pesagem.html";
+}
+
+function rejeitarComplemento(id) {
+  if (confirm("Tem certeza que deseja rejeitar esta solicitação?")) {
+    complementos = complementos.filter((c) => c.id !== id);
+    renderizarComplementos();
+    alert("Solicitação rejeitada.");
+  }
+}
+
+// Função de Logout
+function logout() {
+  localStorage.removeItem("token");
+  localStorage.removeItem("paCarregadeira");
+  window.location.href = "tablet-login.html";
+}
