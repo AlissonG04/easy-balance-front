@@ -36,7 +36,33 @@ socket.on("peso-balanca", (data) => {
 
 // Função para voltar
 function voltar() {
-  // Limpa o complemento selecionado para evitar bagunça
-  localStorage.removeItem("complementoSelecionado");
-  window.location.href = "tablet-home.html";
+  const complemento = JSON.parse(
+    localStorage.getItem("complementoSelecionado")
+  );
+  const token = localStorage.getItem("token");
+
+  if (complemento && token) {
+    fetch(`http://localhost:3000/api/complements/${complemento.id}/complete`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          // Após finalizar no back-end, limpar e voltar
+          localStorage.removeItem("complementoSelecionado");
+          window.location.href = "tablet-home.html";
+        } else {
+          alert("Erro ao finalizar complemento.");
+        }
+      })
+      .catch((error) => {
+        console.error("Erro ao finalizar complemento:", error);
+        alert("Erro de conexão ao finalizar complemento.");
+      });
+  } else {
+    window.location.href = "tablet-home.html";
+  }
 }
