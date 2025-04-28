@@ -5,7 +5,7 @@ const container = document.getElementById("complementos-container");
 const semSolicitacoes = document.getElementById("sem-solicitacoes");
 const paCarregadeira = document.getElementById("pa-carregadeira");
 
-// Recupera nome da Pá Carregadeira do localStorage
+// Recupera a pá carregadeira do localStorage
 const pa = localStorage.getItem("paCarregadeira") || "Desconhecida";
 paCarregadeira.textContent = `Pá Carregadeira ${pa}`;
 
@@ -24,7 +24,7 @@ function renderizarComplementos() {
   semSolicitacoes.style.display = "none";
 
   complementos
-    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Mais recentes primeiro
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     .forEach((comp) => {
       const card = document.createElement("div");
       card.className = "complemento-card";
@@ -63,13 +63,13 @@ function renderizarComplementos() {
     });
 }
 
-// Simulação de recebimento via WebSocket
+// WebSocket recebendo novos complementos
 socket.on("new-complement", (data) => {
   complementos.push(data);
   renderizarComplementos();
 });
 
-// Funções de aceitar e rejeitar
+// Função de aceitar complemento
 function aceitarComplemento(id) {
   const complemento = complementos.find((c) => c.id === id);
 
@@ -78,28 +78,40 @@ function aceitarComplemento(id) {
     return;
   }
 
-  // Salva o complemento aceito no localStorage
+  // Salvar complemento no localStorage
   localStorage.setItem("complementoAceito", JSON.stringify(complemento));
 
-  // Remove da lista de pendentes
+  // Atualizar status local
   complementos = complementos.filter((c) => c.id !== id);
   renderizarComplementos();
 
-  // Redireciona para a tela de pesagem
+  // Redirecionar para tela de pesagem
   window.location.href = "tablet-pesagem.html";
 }
 
+// Função de rejeitar complemento
 function rejeitarComplemento(id) {
   if (confirm("Tem certeza que deseja rejeitar esta solicitação?")) {
     complementos = complementos.filter((c) => c.id !== id);
     renderizarComplementos();
-    alert("Solicitação rejeitada.");
+    showToast("Solicitação rejeitada.");
   }
+}
+
+// Função para mostrar Toast
+function showToast(mensagem) {
+  const toast = document.getElementById("toast");
+  toast.textContent = mensagem;
+  toast.className = "toast show";
+  setTimeout(() => {
+    toast.className = "toast";
+  }, 3000);
 }
 
 // Função de Logout
 function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("paCarregadeira");
+  localStorage.removeItem("complementoAceito");
   window.location.href = "tablet-login.html";
 }

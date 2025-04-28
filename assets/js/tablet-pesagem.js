@@ -1,68 +1,37 @@
-// Conectar ao WebSocket
-const socket = io("http://localhost:3000");
+// assets/js/tablet-pesagem.js
 
-// Elementos da página
-const pesoDesejadoEl = document.getElementById("peso-desejado");
-const pesoAtualEl = document.getElementById("peso-atual");
+const socket = io("http://localhost:3000"); // Ajuste se necessário
 
-// Mostrar qual pá carregadeira está logada
-const paCarregadeira = localStorage.getItem("paCarregadeira");
-document.getElementById(
-  "pa-carregadeira"
-).innerText = `Pá Carregadeira ${paCarregadeira}`;
+// Elementos
+const pesoDesejadoElement = document.getElementById("peso-desejado");
+const pesoAtualElement = document.getElementById("peso-atual");
 
-// Recuperar complemento aceito
-const complementoSelecionado = JSON.parse(
-  localStorage.getItem("complementoSelecionado")
-);
+// Recupera o complemento aceito
+const complemento = JSON.parse(localStorage.getItem("complementoAceito"));
 
-if (complementoSelecionado) {
-  const brutoDesejado =
-    Number(complementoSelecionado.tara) + Number(complementoSelecionado.liquid);
-  pesoDesejadoEl.innerText = `${brutoDesejado.toFixed(2)} kg`;
-} else {
-  pesoDesejadoEl.innerText = "-- kg";
+if (!complemento) {
+  alert("Nenhum complemento aceito encontrado.");
+  window.location.href = "tablet-home.html";
 }
 
-// Atualizar Peso Atual em tempo real
-socket.on("peso-balanca", (data) => {
-  if (!data) return;
+// Calcular o Peso Desejado = Tara + Líquido
+const pesoDesejado = (
+  Number(complemento.tara) + Number(complemento.liquid)
+).toFixed(2);
+pesoDesejadoElement.textContent = `${pesoDesejado} kg`;
 
-  // Filtrar pela balança correta
-  if (data.balanceId === complementoSelecionado.balance_id) {
-    pesoAtualEl.innerText = `${Number(data.peso).toFixed(2)} kg`;
+// Atualizar Peso Atual em tempo real
+socket.on("update-weight", (data) => {
+  // Você vai precisar garantir que o dado recebido é da balança correta
+  if (data.balanceId === complemento.balance_id) {
+    pesoAtualElement.textContent = `${Number(data.weight).toFixed(2)} kg`;
   }
 });
 
-// Função para voltar
+// Função de Voltar
 function voltar() {
-  const complemento = JSON.parse(
-    localStorage.getItem("complementoSelecionado")
-  );
-  const token = localStorage.getItem("token");
-
-  if (complemento && token) {
-    fetch(`http://localhost:3000/api/complements/${complemento.id}/complete`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          // Após finalizar no back-end, limpar e voltar
-          localStorage.removeItem("complementoSelecionado");
-          window.location.href = "tablet-home.html";
-        } else {
-          alert("Erro ao finalizar complemento.");
-        }
-      })
-      .catch((error) => {
-        console.error("Erro ao finalizar complemento:", error);
-        alert("Erro de conexão ao finalizar complemento.");
-      });
-  } else {
+  if (confirm("Tem certeza que deseja finalizar o complemento?")) {
+    localStorage.removeItem("complementoAceito");
     window.location.href = "tablet-home.html";
   }
 }
